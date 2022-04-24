@@ -1,30 +1,797 @@
-#include<iostream>
+#include <iostream>
+#include <windows.h>
 using namespace std;
+enum OS
+{
+	iOS,
+	Android,
+	windows_phone
+};
+enum Ram
+{
+	r2GB,
+	r4GB,
+	r6GB,
+	r8GB,
+	r12GB,
+	r16GB,
+	r32GB,
+	r64GB
+};
+enum Storage
+{
+	S16GB,
+	S32GB,
+	S64GB,
+	S128GB,
+	S256GB,
+	S512GB,
+	S1TB,
+	S2TB
+};
+enum Color
+{
+	White,
+	Black
+};
+struct Phone
+{
+	string Name;
+	string Production_Company;
+	OS os;
+	Ram ram;
+	Storage storage;
+	Color color;
+	long long price;
+	int Count_of_Phone = 0;
+	int Count_of_Sold = 0;
+};
+void add_phone(Phone *&, int &);
+void update_size(Phone *&, int &);
+void add_phone(Phone *&, int &, string, string, int);
+void remove_phone(Phone *&, int &);
+void sort_phones_by_price(Phone *&, int);
+void search(Phone *&, int);
+void show_info(Phone *&, int);
+void change_mobile_info(Phone *&, int);
+void change_comp(Phone *&, int, int);
+void change_os(Phone *&, int);
+void change_amount_of_ram(Phone *&, int);
+void change_amount_of_storage(Phone *&, int);
+void change_price(Phone *&, int);
+void change_color(Phone *&, int);
+void change_count_of_phone(Phone *&, int);
+void sell_phone(Phone *&, int);
+void print_phones(Phone *&, int);
+void most_sold_item(Phone *&, int);
 int main()
 {
-	int s1,s2,s5,s10,s50;
-	int N,sum=0,count=0;
-	cout<<"Enter number :\n";
-	cin>>N;
-	for(int s1=0; s1<=200; s1++)
+	int size = 0, x;
+	Phone *Mobile;
+	do
 	{
-		for(int s2=0; s2<=100; s2++)
+		system("color 3");
+		cout << "<<Menu>>\n"
+			 << "1- add a phone\n"
+			 << "2- Remove a phone\n"
+			 << "3- Sort phones by price\n"
+			 << "4- Search a phone\n"
+			 << "5- Change mobile info \n"
+			 << "6- Sell a phone \n"
+			 << "7- Print phones\n"
+			 << "8- Print phones sorted by the most sold to the least \n"
+			 << "9- Quit \n";
+		cout
+			<< "Select your operation:\n";
+		cin >> x;
+		switch (x)
 		{
-			for(int s5=0; s5<=40; s5++)
+		case 1:
+			add_phone(Mobile, size);
+			break;
+		case 2:
+			remove_phone(Mobile, size);
+			break;
+		case 3:
+			sort_phones_by_price(Mobile, size);
+			break;
+		case 4:
+			search(Mobile, size);
+			break;
+		case 5:
+			change_mobile_info(Mobile, size);
+			break;
+		case 6:
+			sell_phone(Mobile, size);
+			break;
+		case 7:
+			print_phones(Mobile, size);
+			break;
+		case 8:
+			most_sold_item(Mobile, size);
+			break;
+		}
+	} while (x != 9);
+	delete [] Mobile;
+}
+void add_phone(Phone *&Mobile, int &size)
+{
+	int increase_number_of_phone, x;
+	bool check = true, check2;
+	long long price;
+	string name, production_company;
+	system("color 6");
+	cout << "Enter Phone name:\n";
+	cin >> name;
+	cout << "Enter Name of manufacturing company:\n";
+	cin >> production_company;
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == name && Mobile[i].Production_Company == production_company)
+		{
+			cout << "Number of phones available: " << Mobile[i].Count_of_Phone << endl;
+			cout << "How many mobile phones do you want to add?\n";
+			cin >> increase_number_of_phone;
+
+			add_phone(Mobile, size, name, production_company, increase_number_of_phone);
+			check = false;
+		}
+	}
+	if (check)
+	{
+
+		update_size(Mobile, size);
+		Mobile[size - 1].Name = name;
+		Mobile[size - 1].Production_Company = production_company;
+		do
+		{
+			check2 = true;
+			cout << "<<Menu>>\n";
+			cout << "1-iOS\n"
+				 << "2-android\n"
+				 << "3-windows phone\n"
+				 << "Choose operating system:\n";
+			cin >> x;
+			switch (x)
 			{
-				for(int s10=0; s10<=20; s10++)
-				{
-					for(int s50=0; s50<=4; s50++)
-					{
-						sum=((s1*1)+(s2*2)+(s5*5)+(s10*10)+(s50*50));
-						if(sum==N)
-						{
-							++count;
-						}
-					}
-				}
+			case 1:
+				Mobile[size - 1].os = OS::iOS;
+				break;
+			case 2:
+				Mobile[size - 1].os = OS::Android;
+				break;
+			case 3:
+				Mobile[size - 1].os = OS::windows_phone;
+				break;
+			default:
+				check2 = false;
+				break;
+			}
+		} while (!check2);
+		do
+		{
+			check2 = true;
+			cout << "<<Menu>>\n";
+			cout << "1-2GB\n"
+				 << "2-4GB\n"
+				 << "3-6GB\n"
+				 << "4-8GB\n"
+				 << "5-12GB\n"
+				 << "6-16GB\n"
+				 << "7-32GB\n"
+				 << "8-64GB\n"
+				 << "Choose amount of ram:\n";
+			cin >> x;
+			switch (x)
+			{
+			case 1:
+				Mobile[size - 1].ram = Ram::r2GB;
+				break;
+			case 2:
+				Mobile[size - 1].ram = Ram::r4GB;
+				break;
+			case 3:
+				Mobile[size - 1].ram = Ram::r6GB;
+				break;
+			case 4:
+				Mobile[size - 1].ram = Ram::r8GB;
+				break;
+			case 5:
+				Mobile[size - 1].ram = Ram::r12GB;
+				break;
+			case 6:
+				Mobile[size - 1].ram = Ram::r16GB;
+				break;
+			case 7:
+				Mobile[size - 1].ram = Ram::r32GB;
+				break;
+			case 8:
+				Mobile[size - 1].ram = Ram::r64GB;
+				break;
+			default:
+				check2 = false;
+				break;
+			}
+		} while (!check2);
+		do
+		{
+			check2 = true;
+			cout << "<<Menu>>\n";
+			cout << "1-16GB\n"
+				 << "2-32GB\n"
+				 << "3-64GB\n"
+				 << "4-128GB\n"
+				 << "5-256GB\n"
+				 << "6-512GB\n"
+				 << "7-1TB\n"
+				 << "8-2TB\n"
+				 << "Choose amount of storage:\n";
+			cin >> x;
+			switch (x)
+			{
+			case 1:
+				Mobile[size - 1].storage = Storage::S16GB;
+				break;
+			case 2:
+				Mobile[size - 1].storage = Storage::S32GB;
+				break;
+			case 3:
+				Mobile[size - 1].storage = Storage::S64GB;
+				break;
+			case 4:
+				Mobile[size - 1].storage = Storage::S128GB;
+				break;
+			case 5:
+				Mobile[size - 1].storage = Storage::S256GB;
+				break;
+			case 6:
+				Mobile[size - 1].storage = Storage::S512GB;
+				break;
+			case 7:
+				Mobile[size - 1].storage = Storage::S1TB;
+				break;
+			case 8:
+				Mobile[size - 1].storage = Storage::S2TB;
+				break;
+			default:
+				check2 = false;
+				break;
+			}
+		} while (!check2);
+		do
+		{
+			check2 = true;
+			cout << "<<Menu>>\n";
+			cout << "1-black\n"
+				 << "2-white\n"
+				 << "Choose color of phone:\n";
+			cin >> x;
+			switch (x)
+			{
+			case 1:
+				Mobile[size - 1].color = Color::Black;
+				break;
+			case 2:
+				Mobile[size - 1].color = Color::White;
+				break;
+			default:
+				check2 = false;
+				break;
+			}
+		} while (!check2);
+		cout << "Enter price of phone:\n";
+		cin >> price;
+		Mobile[size - 1].price = price;
+		int count_of_mobile;
+		cout << "How many mobile phones are available?\n";
+		cin >> count_of_mobile;
+		Mobile[size - 1].Count_of_Phone += count_of_mobile;
+	}
+}
+void add_phone(Phone *&Mobile, int &size, string name, string production_company, int increase_number_of_phone)
+{
+
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == name && Mobile[i].Production_Company == production_company)
+		{
+			Mobile[i].Count_of_Phone += increase_number_of_phone;
+		}
+	}
+}
+void update_size(Phone *&Mobile, int &size)
+{
+	Phone *temp = new Phone[size + 1];
+	for (int i = 0; i < size; i++)
+	{
+		temp[i] = Mobile[i];
+	}
+	if (size != 0)
+	{
+		delete[] Mobile;
+	}
+	Mobile = new Phone[size + 1];
+	for (int i = 0; i < size + 1; i++)
+	{
+		Mobile[i] = temp[i];
+	}
+	delete[] temp;
+	size++;
+}
+void remove_phone(Phone *&Mobile, int &size)
+{
+	string mobile_name, company_name;
+	bool check = true;
+	cout << "Enter the mobile name:\n";
+	cin >> mobile_name;
+	cout << "Enter the company name:\n";
+	cin >> company_name;
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == mobile_name && Mobile[i].Production_Company == company_name)
+		{
+			check = false;
+			for (int j = i; j < size - 1; j++)
+			{
+				Mobile[j] = Mobile[j + 1];
+			}
+			Phone *temp = new Phone[size - 1];
+			for (int j = 0; j < size - 1; j++)
+			{
+				temp[j] = Mobile[j];
+			}
+			delete[] Mobile;
+			Mobile = temp;
+			size--;
+		}
+	}
+	if (check)
+	{
+		cout << "Mobile not found!!!\n";
+	}
+	else
+	{
+		cout << "Mobile removed!!!\n";
+	}
+}
+void sort_phones_by_price(Phone *&Mobile, int size)
+{
+	Phone *temp = new Phone[size];
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size - i - 1; j++)
+		{
+			if (Mobile[j].price > Mobile[j + 1].price)
+			{
+				temp[j + 1] = Mobile[j + 1];
+				Mobile[j + 1] = Mobile[j];
+				Mobile[j] = temp[j + 1];
 			}
 		}
 	}
-	cout<<count;
+	for (int i = 0; i < size; i++)
+	{
+		show_info(Mobile, i);
+	}
+}
+void search(Phone *&Mobile, int size)
+{
+	string mobile_name, company_name;
+	bool check = true;
+	cout << "Enter the mobile name:\n";
+	cin >> mobile_name;
+	cout << "Enter the company name:\n";
+	cin >> company_name;
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == mobile_name && Mobile[i].Production_Company == company_name)
+		{
+			show_info(Mobile, i);
+			check = false;
+		}
+	}
+	if (check)
+	{
+		cout << "Mobile not found!!!\n";
+	}
+}
+void show_info(Phone *&Mobile, int i)
+{
+	cout << "Mobile name: " << Mobile[i].Name << endl;
+	cout << "company name: " << Mobile[i].Production_Company << endl;
+	if (Mobile[i].os == OS::iOS)
+	{
+		cout << "operating system: ios\n";
+	}
+	else if (Mobile[i].os == OS::Android)
+	{
+		cout << "operating system: android\n";
+	}
+	else if (Mobile[i].os == OS::windows_phone)
+	{
+		cout << "operating system: windows phone\n";
+	}
+	if (Mobile[i].ram == Ram::r2GB)
+	{
+		cout << "amount of ram: 2GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r4GB)
+	{
+		cout << "amount of ram: 4GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r6GB)
+	{
+		cout << "amount of ram: 6GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r8GB)
+	{
+		cout << "amount of ram: 8GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r12GB)
+	{
+		cout << "amount of ram: 12GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r16GB)
+	{
+		cout << "amount of ram: 16GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r32GB)
+	{
+		cout << "amount of ram: 32GB\n";
+	}
+	else if (Mobile[i].ram == Ram::r64GB)
+	{
+		cout << "amount of ram: 64GB\n";
+	}
+	if (Mobile[i].storage == Storage::S16GB)
+	{
+		cout << "amount of storage: 16GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S32GB)
+	{
+		cout << "amount of storage: 32GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S64GB)
+	{
+		cout << "amount of storage: 64GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S128GB)
+	{
+		cout << "amount of storage: 128GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S256GB)
+	{
+		cout << "amount of storage: 256GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S512GB)
+	{
+		cout << "amount of storage: 512GB\n";
+	}
+	else if (Mobile[i].storage == Storage::S1TB)
+	{
+		cout << "amount of storage: 1TB\n";
+	}
+	else if (Mobile[i].storage == Storage::S2TB)
+	{
+		cout << "amount of storage: 2TB\n";
+	}
+	cout << "price of phone: " << Mobile[i].price << endl;
+	if (Mobile[i].color == Color::White)
+	{
+		cout << "Color: white\n";
+	}
+	else if (Mobile[i].color == Color::Black)
+	{
+		cout << "Color: black\n";
+	}
+	cout << "count of phone: " << Mobile[i].Count_of_Phone << endl;
+	cout << "count of sold: " << Mobile[i].Count_of_Sold << endl;
+	cout << "******************************************************\n";
+}
+void change_mobile_info(Phone *&Mobile, int size)
+{
+	string mobile_name, company_name;
+	bool check = true;
+	int x;
+	system("color 5");
+	cout << "Enter the mobile name:\n";
+	cin >> mobile_name;
+	cout << "Enter the company name:\n";
+	cin >> company_name;
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == mobile_name && Mobile[i].Production_Company == company_name)
+		{
+			check = false;
+			cout << "<<Menu>>\n"
+				 << "0-change company and name\n"
+				 << "1-change operating system\n"
+				 << "2-change amount of ram\n"
+				 << "3-change amount of storage\n"
+				 << "4-change price\n"
+				 << "5-change color\n"
+				 << "6-change count of phone\n";
+			cout << "Select your operation:\n";
+			cin >> x;
+			switch (x)
+			{
+			case 0:
+				change_comp(Mobile, i, size);
+				break;
+			case 1:
+				change_os(Mobile, i);
+				break;
+			case 2:
+				change_amount_of_ram(Mobile, i);
+				break;
+			case 3:
+				change_amount_of_storage(Mobile, i);
+				break;
+			case 4:
+				change_price(Mobile, i);
+				break;
+			case 5:
+				change_color(Mobile, i);
+				break;
+			case 6:
+				change_count_of_phone(Mobile, i);
+			default:
+				cout << "input invalid\n";
+			}
+		}
+	}
+	if (check)
+	{
+		cout << "Mobile not found!!!\n";
+	}
+}
+void change_comp(Phone *&Mobile, int i, int size)
+{
+	string tname, tcomp;
+	bool res = false;
+	cout << "Enter name and company: ";
+	cin >> tname >> tcomp;
+	for (int z = 0; z < size; z++)
+	{
+		if (Mobile[z].Name == tname && Mobile[z].Production_Company == tcomp)
+		{
+			res = true;
+		}
+	}
+	if (res)
+	{
+		cout << "Name or Company was taken !\n";
+	}
+	else
+	{
+		Mobile[i].Name = tname;
+		Mobile[i].Production_Company = tcomp;
+	}
+}
+void change_os(Phone *&Mobile, int i)
+{
+	int x;
+	cout << "<<Menu>>\n";
+	cout << "1-iOS\n"
+		 << "2-android\n"
+		 << "3-windows phone\n"
+		 << "Choose operating system for change:\n";
+	cin >> x;
+	switch (x)
+	{
+	case 1:
+		Mobile[i].os = OS::iOS;
+		break;
+	case 2:
+		Mobile[i].os = OS::Android;
+		break;
+	case 3:
+		Mobile[i].os = OS::windows_phone;
+		break;
+	default:
+		cout << "input invalid\n";
+		break;
+	}
+}
+void change_amount_of_ram(Phone *&Mobile, int i)
+{
+	int x;
+	bool check = true;
+	cout << "<<Menu>>\n";
+	cout << "1-2GB\n"
+		 << "2-4GB\n"
+		 << "3-6GB\n"
+		 << "4-8GB\n"
+		 << "5-12GB\n"
+		 << "6-16GB\n"
+		 << "7-32GB\n"
+		 << "8-64GB\n"
+		 << "Choose amount of ram:\n";
+	cin >> x;
+	switch (x)
+	{
+	case 1:
+		Mobile[i].ram = Ram::r2GB;
+		break;
+	case 2:
+		Mobile[i].ram = Ram::r4GB;
+		break;
+	case 3:
+		Mobile[i].ram = Ram::r6GB;
+		break;
+	case 4:
+		Mobile[i].ram = Ram::r8GB;
+		break;
+	case 5:
+		Mobile[i].ram = Ram::r12GB;
+		break;
+	case 6:
+		Mobile[i].ram = Ram::r16GB;
+		break;
+	case 7:
+		Mobile[i].ram = Ram::r32GB;
+		break;
+	case 8:
+		Mobile[i].ram = Ram::r64GB;
+		break;
+	default:
+		cout << "input invalid\n";
+		check = false;
+		break;
+	}
+	if (check)
+	{
+		cout << "amount of ram changed!\n";
+	}
+}
+void change_amount_of_storage(Phone *&Mobile, int i)
+{
+	int x;
+	bool check = true;
+	cout << "<<Menu>>\n";
+	cout << "1-16GB\n"
+		 << "2-32GB\n"
+		 << "3-64GB\n"
+		 << "4-128GB\n"
+		 << "5-256GB\n"
+		 << "6-512GB\n"
+		 << "7-1TB\n"
+		 << "8-2TB\n"
+		 << "Choose amount of storage:\n";
+	cin >> x;
+	switch (x)
+	{
+	case 1:
+		Mobile[i].storage = Storage::S16GB;
+		break;
+	case 2:
+		Mobile[i].storage = Storage::S32GB;
+		break;
+	case 3:
+		Mobile[i].storage = Storage::S64GB;
+		break;
+	case 4:
+		Mobile[i].storage = Storage::S128GB;
+		break;
+	case 5:
+		Mobile[i].storage = Storage::S256GB;
+		break;
+	case 6:
+		Mobile[i].storage = Storage::S512GB;
+		break;
+	case 7:
+		Mobile[i].storage = Storage::S1TB;
+		break;
+	case 8:
+		Mobile[i].storage = Storage::S2TB;
+		break;
+	default:
+		cout << "input invalid\n";
+		check = false;
+		break;
+	}
+	if (check)
+	{
+		cout << "amount of storage changed!\n";
+	}
+}
+void change_price(Phone *&Mobile, int i)
+{
+	long long price;
+	cout << "Enter price phone for change:\n";
+	cin >> price;
+	Mobile[i].price = price;
+	cout << "price changed!\n";
+}
+void change_color(Phone *&Mobile, int i)
+{
+	int x;
+	bool check = true;
+	cout << "<<Menu>>\n";
+	cout << "1-black\n"
+		 << "2-white\n"
+		 << "Choose color of phone:\n";
+	cin >> x;
+	switch (x)
+	{
+	case 1:
+		Mobile[i].color = Color::Black;
+		break;
+	case 2:
+		Mobile[i].color = Color::White;
+		break;
+	default:
+		cout << "input invalid";
+		check = false;
+		break;
+	}
+	if (check)
+	{
+		cout << "color changed!\n";
+	}
+}
+void change_count_of_phone(Phone *&Mobile, int i)
+{
+	int count;
+	cout << "Enter price phone for change:\n";
+	cin >> count;
+	Mobile[i].Count_of_Phone = count;
+	cout << "count of phone changed!\n";
+}
+void sell_phone(Phone *&Mobile, int size)
+{
+	string mobile_name, company_name;
+	bool check = true;
+	int x;
+	cout << "Enter the mobile name:\n";
+	cin >> mobile_name;
+	cout << "Enter the company name:\n";
+	cin >> company_name;
+	for (int i = 0; i < size; i++)
+	{
+		if (Mobile[i].Name == mobile_name && Mobile[i].Production_Company == company_name)
+		{
+			if (Mobile[i].Count_of_Phone != 0)
+			{
+				Mobile[i].Count_of_Phone--;
+				Mobile[i].Count_of_Sold++;
+			}
+			else
+			{
+				cout << "There is no mobile phone for sale!\n";
+			}
+			check = false;
+		}
+	}
+	if (check)
+	{
+		cout << "Mobile not found!!!\n";
+	}
+}
+void print_phones(Phone *&Mobile, int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		show_info(Mobile, i);
+	}
+}
+void most_sold_item(Phone *&Mobile, int size)
+{
+	Phone *temp = new Phone[size];
+	for (int i = 0; i < size; i++)
+	{
+		for (int j = 0; j < size - i - 1; j++)
+		{
+			if (Mobile[j].Count_of_Sold < Mobile[j + 1].Count_of_Sold)
+			{
+				temp[j + 1] = Mobile[j + 1];
+				Mobile[j + 1] = Mobile[j];
+				Mobile[j] = temp[j + 1];
+			}
+		}
+	}
+	for (int i = 0; i < size; i++)
+	{
+		show_info(Mobile, i);
+	}
 }
